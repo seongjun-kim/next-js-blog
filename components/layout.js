@@ -3,11 +3,17 @@ import Image from "next/image";
 import styles from "./layout.module.css";
 import utilStyles from "../styles/utils.module.css";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const name = "Seongjun Kim";
 export const siteTitle = "zoonizone Blog.";
 
-export default function Layout({ children, home }) {
+export default function Layout({ children }) {
+    const router = useRouter();
+    const path = router.pathname || "";
+    const errorPage = path === "/_error";
+    const root = path === "/";
+
     return (
         <div className={styles.container}>
             <Head>
@@ -26,7 +32,7 @@ export default function Layout({ children, home }) {
                 <meta name="twitter:card" content="summary_large_image" />
             </Head>
             <header className={styles.header}>
-                {home ? (
+                {root ? (
                     <>
                         <Image
                             priority
@@ -40,30 +46,36 @@ export default function Layout({ children, home }) {
                     </>
                 ) : (
                     <>
-                        <Link href="/">
-                            <a>
-                                <Image
-                                    priority
-                                    src="/images/emoji.jpg"
-                                    className={utilStyles.borderCircle}
-                                    height={108}
-                                    width={108}
-                                    alt={name}
-                                />
-                            </a>
-                        </Link>
-                        <h2 className={utilStyles.headingLg}>
-                            <Link href="/">
-                                <a className={utilStyles.colorInherit}>
-                                    {name}
-                                </a>
-                            </Link>
-                        </h2>
+                        {errorPage ? (
+                            <></>
+                        ) : (
+                            <>
+                                <Link href="/">
+                                    <a>
+                                        <Image
+                                            priority
+                                            src="/images/emoji.jpg"
+                                            className={utilStyles.borderCircle}
+                                            height={108}
+                                            width={108}
+                                            alt={name}
+                                        />
+                                    </a>
+                                </Link>
+                                <h2 className={utilStyles.headingLg}>
+                                    <Link href="/">
+                                        <a className={utilStyles.colorInherit}>
+                                            {name}
+                                        </a>
+                                    </Link>
+                                </h2>
+                            </>
+                        )}
                     </>
                 )}
             </header>
             <main>{children}</main>
-            {!home && (
+            {!root && (
                 <div className={styles.backToHome}>
                     <Link href="/">
                         <a>← Back to home</a>
