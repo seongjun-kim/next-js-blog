@@ -4,6 +4,7 @@ import utilStyles from "../styles/utils.module.css";
 import cn from "classnames";
 import { useState } from "react";
 import Link from "next/link";
+import Date from "../components/date";
 import { getSortedPostsData } from "../lib/posts";
 
 export async function getStaticProps() {
@@ -39,7 +40,7 @@ export default function Home({ allPostsData }) {
             <section className={utilStyles.headingMd}>
                 <p>Blog.</p>
                 <p>
-                    Hello Hello Hi Hello{" "}
+                    I made this blog by{" "}
                     <a
                         className={cn({
                             [utilStyles.first]: type === "first",
@@ -53,7 +54,12 @@ export default function Home({ allPostsData }) {
                 </p>
                 <p>
                     <Link href="/posts">
-                        <a>Go to see my posts!</a>
+                        <a>Posts</a>
+                    </Link>
+                </p>
+                <p>
+                    <Link href="/comments">
+                        <a>Comments</a>
                     </Link>
                 </p>
             </section>
@@ -64,11 +70,13 @@ export default function Home({ allPostsData }) {
                 <ul className={utilStyles.list}>
                     {allPostsData?.map(({ id, date, title }) => (
                         <li className={utilStyles.listItem} key={id}>
-                            {title}
+                            <Link href={`/posts/${id}`}>
+                                <a>{title}</a>
+                            </Link>
                             <br />
-                            {id}
-                            <br />
-                            {date}
+                            <small className={utilStyles.lightText}>
+                                <Date dateString={date} />
+                            </small>
                         </li>
                     ))}
                 </ul>
